@@ -1,0 +1,3 @@
+module Happymondays
+  # Your code goes here...
+end
