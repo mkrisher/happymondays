@@ -1,0 +1,79 @@
+Happy Mondays
+=============
+Mike Krisher
+
+Details
+=======
+
+The source for this gem is located on Github:
+[https://github.com/mkrisher/happymondays][]
+
+To learn more about Date calculations in ActiveSupport:
+[http://as.rubyonrails.org/classes/ActiveSupport/CoreExtensions/Date/Calculations.html][]
+
+[https://github.com/mkrisher/happymondays]: https://github.com/mkrisher/happymondays
+[http://as.rubyonrails.org/classes/ActiveSupport/CoreExtensions/Date/Calculations.html]: http://as.rubyonrails.org/classes/ActiveSupport/CoreExtensions/Date/Calculations.html
+
+Instructions for irb use
+===================================
+
+1) clone the repo
+
+2) build the gem
+  `rake build`
+
+3) install the gem
+  `rake install`
+
+4) require in irb
+  `require happymondays`
+
+Example usage:
+
+5) create a new date object
+  `d = Date.new(2011, 2, 8) # => Tue, 08 Feb 2011`
+
+6) define the day of the week to start the work week
+  `d.week_start_day = 'sunday'`
+
+7) request a date object representing the beginning of the week for the date instance
+  `d.beginning_of_week.strftime('%a %m/%d/%Y') # => Sun, 06 Feb 2011`
+
+8) request a date object representing the end of the week for the date instance
+  `d.end_of_week.strftime('%a %m/%d/%Y') # => Sat, 12 Feb 2011`
+
+Why use this?
+===================================
+
+1) this gem was created out of a need to alter the standard Ruby week from beginning on Monday and ending on Sunday
+2) this gem overwrites three methods, first being the Date#wday and second and third being
+  ActiveSupport::CoreExtensions::Date::Calculations#next_week and ActiveSupport::CoreExtensions::Date::Calculations#end_of_week
+3) this gem aliases the default methods and their default behavior is still available
+4) this gem is simply a mixin that extends the Date and ActiveSupport::CoreExtensions::Date::Calculations classes
+5) it can be used anywhere a normal Ruby Date object would be used
+
+Support
+==================================
+
+Feel free to submit commits or feature requests.  If you send a patch,
+remember to update the corresponding unit tests.  In fact, I prefer
+new feature to be submitted in the form of new unit tests.
+
+For other information contact
+mkrisher at gmail.com.
+
+Other stuff
+=================================
+
+Happy Mondays are an English alternative rock band from Manchester, England.
+
+Most people don't think Mondays are happy, however if you like your job, maybe that is the case.
+
+Warranty
+=================================
+
+This software is provided "as is" and without any express or
+implied warranties, including, without limitation, the implied
+warranties of merchantibility and fitness for a particular
+purpose.
+
