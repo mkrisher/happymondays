@@ -46,10 +46,14 @@ Why use this?
 ===================================
 
 1) this gem was created out of a need to alter the standard Ruby week from beginning on Monday and ending on Sunday
+
 2) this gem overwrites three methods, first being the Date#wday and second and third being
   ActiveSupport::CoreExtensions::Date::Calculations#next_week and ActiveSupport::CoreExtensions::Date::Calculations#end_of_week
+
 3) this gem aliases the default methods and their default behavior is still available
+
 4) this gem is simply a mixin that extends the Date and ActiveSupport::CoreExtensions::Date::Calculations classes
+
 5) it can be used anywhere a normal Ruby Date object would be used
 
 Support
