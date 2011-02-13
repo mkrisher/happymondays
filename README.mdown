@@ -20,26 +20,33 @@ Instructions for irb use
 1) clone the repo
 
 2) build the gem
+
   `rake build`
 
 3) install the gem
+
   `rake install`
 
 4) require in irb
+
   `require 'happymondays'`
 
 Example usage:
 
 5) create a new date object
+
   `d = Date.new(2011, 2, 8) # => Tue, 08 Feb 2011`
 
 6) define the day of the week to start the work week
+
   `d.week_start_day = 'sunday'`
 
 7) request a date object representing the beginning of the week for the date instance
+
   `d.beginning_of_week.strftime('%a %m/%d/%Y') # => Sun, 06 Feb 2011`
 
 8) request a date object representing the end of the week for the date instance
+
   `d.end_of_week.strftime('%a %m/%d/%Y') # => Sat, 12 Feb 2011`
 
 Why use this?
