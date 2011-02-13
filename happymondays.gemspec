@@ -6,11 +6,11 @@ Gem::Specification.new do |s|
   s.name        = "happymondays"
   s.version     = Happymondays::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
+  s.authors     = ["Michael Krisher"]
+  s.email       = ["mike@mikekrisher.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{gem providing an easy api for changing the start and end days for Ruby's Date object}
+  s.description = %q{gem allows for easy changing of week start day from Monday to any other day and setting a duration in days for the number of days in a work week}
 
   s.rubyforge_project = "happymondays"
 
