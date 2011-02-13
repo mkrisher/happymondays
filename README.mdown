@@ -63,6 +63,10 @@ Why use this?
 
 5) it can be used anywhere a normal Ruby Date object would be used
 
+6) the gem allows you to set the day of the week the week starts on
+
+7) the gem also allows you to set the number of days in the work week, for example the default M-F being 5 vs. M-W being 3
+
 Support
 ==================================
 
