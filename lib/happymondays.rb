@@ -54,7 +54,7 @@ __END__
 # gets the start of next week
 #
 d = Date.new(2011, 2, 8)                            # => Tue, 08 Feb 2011
-d.instance_start_day = 'sunday'                     # use Sunday as the start day
+d.instance_start_day = 'sunday'                     # use Sunday as the start day vs. default Monday
 puts d.beginning_of_week.strftime('%a %m/%d/%Y')    # => Sun, 06 Feb 2011
 puts d.end_of_week.strftime('%a %m/%d/%Y')          # => Sat, 12 Feb 2011
 puts d.next_week.strftime('%a %m/%d/%Y')            # => Sun, 13 Feb 2011
@@ -66,3 +66,4 @@ puts d.next_week.strftime('%a %m/%d/%Y')            # => Sun, 13 Feb 2011
 d = Date.new(2011,2,7)                              # => Mon, 07 Feb 2011
 d.instance_week_length = 5                          # => sets the length in num of days
 puts d.end_of_week.strftime('%a %m/%d/%Y')          # => Fri, 11 Feb 2011
+
