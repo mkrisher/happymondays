@@ -49,6 +49,10 @@ class HappyMondaysTest < Test::Unit::TestCase
     @my_date.week_length = 5
     assert_equal  @my_date.end_of_week.strftime('%a %m/%d/%Y'), 'Fri 02/11/2011'
     assert_equal  @my_date.next_week.strftime('%a %m/%d/%Y'), 'Mon 02/14/2011'
+
+    @my_date.week_length = 14 # week length can't be greater than 7
+    assert_equal  @my_date.end_of_week.strftime('%a %m/%d/%Y'), 'Sun 02/13/2011'
+    assert_equal  @my_date.next_week.strftime('%a %m/%d/%Y'), 'Mon 02/14/2011'
   end
 
   def test_multithreading

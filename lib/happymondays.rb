@@ -33,6 +33,7 @@ module HappyMondays
 
       alias_method :orig_end_of_week, :end_of_week
       def end_of_week
+        self.week_length = 7 if !self.week_length.nil? && self.week_length > 7
         length = self.week_length || 7
         self.beginning_of_week + (length.days - 1.day)
       end
