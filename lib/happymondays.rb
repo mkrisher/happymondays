@@ -47,7 +47,7 @@ module HappyMondays
         days_to_wday = self.orig_wday - self.wday
         res = self.dup
         res = res - days_to_wday.days
-        res.week_start_day = self.week_start_day # set the week_start_day so wday returns the correct 'day' in the new date
+        res.week_start_day = self.week_start_day # set the week_start_day so wday returns the correct 'day name' in the new date
         res.acts_like?(:time) ? res.midnight : res
       end
 
@@ -65,7 +65,7 @@ module HappyMondays
         # if in a Thread this can't return self because wday is wrong
         if thread?
           res = Date.new(self.year, self.month, ( (self.day + length - 1) - (self.orig_wday - self.wday) ) )
-          res.week_start_day = Date::DAYNAMES[self.wday + length - 1] # set the week_start_day so wday returns the correct 'day' in the new date
+          res.week_start_day = Date::DAYNAMES[self.wday + length - 1] # set the week_start_day so wday returns the correct 'day name' in the new date
           res
         else
           self.beginning_of_week + (length.days - 1.days)
