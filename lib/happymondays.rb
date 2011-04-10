@@ -10,26 +10,26 @@ module HappyMondays
     base.class_eval do
 
       def week_start_day=(val)
-        @start = val
+        Thread.current[:week_start_day] = val
       end
 
       def week_start_day
-        @start
+        Thread.current[:week_start_day] || 'monday'
       end
 
       def week_length=(val)
-        @length = val
+        val = 7 if val > 7
+        Thread.current[:week_length] = val
       end
 
       def week_length
-        @length || 7
+        Thread.current[:week_length] || 7
       end
 
       alias_method :orig_wday, :wday
       def wday
-        self.set_from_thread if @start.nil? && self.thread?
-        day = self.week_start_day || Date::DAYNAMES[self.orig_wday]
-        result = case day.downcase
+        day     = self.week_start_day
+        result  = case day.downcase
           when 'sunday'     then 0
           when 'monday'     then 1
           when 'tuesday'    then 2
@@ -43,47 +43,31 @@ module HappyMondays
 
       alias_method :orig_beginning_of_week, :beginning_of_week
       def beginning_of_week
-        set_default_week_start
-        days_to_wday = self.orig_wday - self.wday
-        res = self.dup
-        res = res - days_to_wday.days
-        res.week_start_day = self.week_start_day # set the week_start_day so wday returns the correct 'day name' in the new date
+        days_to_wday        = self.orig_wday - self.wday
+        res                 = self.dup
+        res                 = res - days_to_wday.days
+        res.week_start_day  = self.week_start_day
+        res.acts_like?(:time) ? res.midnight : res
+      end
+
+      alias_method :orig_end_of_week, :end_of_week
+      def end_of_week
+        length              = self.week_length
+        res                 = Date.new(self.year, self.month, (self.day + length - 1) - (self.orig_wday - self.wday))
+        calc                = res.wday - 1 if length == 7
+        calc                = res.wday + (length - 1) if length != 7
+        #TODO: put in a callback or new Thread so week_start_day is not overwritten
+        res.week_start_day  = Date::DAYNAMES[calc]
         res.acts_like?(:time) ? res.midnight : res
       end
 
       alias_method :orig_next_week, :next_week
       def next_week()
-        result = self.beginning_of_week + 7
-        self.acts_like?(:time) ? result.change(:hour => 0) : result
+        res                 = self.beginning_of_week + 7.days
+        res.week_start_day  = self.week_start_day
+        res.acts_like?(:time) ? res.change(:hour => 0) : res
       end
 
-      alias_method :orig_end_of_week, :end_of_week
-      def end_of_week
-        set_default_week_start
-        length = self.week_length
-        length = 7 if length > 7
-        # if in a Thread this can't return self because wday is wrong
-        if thread?
-          res = Date.new(self.year, self.month, ( (self.day + length - 1) - (self.orig_wday - self.wday) ) )
-          res.week_start_day = Date::DAYNAMES[self.wday + length - 1] # set the week_start_day so wday returns the correct 'day name' in the new date
-          res
-        else
-          self.beginning_of_week + (length.days - 1.days)
-        end
-      end
-
-      def set_from_thread
-        self.week_start_day = Thread.current["week_start_day"]
-        self.week_length    = Thread.current["week_length"]
-      end
-
-      def thread?
-        !Thread.current['week_start_day'].nil?
-      end
-
-      def set_default_week_start
-        self.week_start_day = 'monday' if @start.nil? && !self.thread?
-      end
     end
   end
 end
