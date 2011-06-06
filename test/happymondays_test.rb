@@ -8,6 +8,7 @@ class HappyMondaysTest < Test::Unit::TestCase
   end
 
   def test_week_start_day
+    @my_date.clear_end_day
     @my_date.week_start_day = 'sunday'
     assert_equal  0, @my_date.wday
     @my_date.week_start_day = 'monday'
@@ -90,7 +91,7 @@ class HappyMondaysTest < Test::Unit::TestCase
     assert_equal  'Sun 02/13/2011', @my_date.end_of_week.strftime('%a %m/%d/%Y')
   end
 
-  def xtest_multithreading
+  def test_multithreading
     Thread.new do
       @first_date = Date.new(2011, 2, 8)
       @first_date.week_start_day = 'sunday'
@@ -106,7 +107,7 @@ class HappyMondaysTest < Test::Unit::TestCase
     end
   end
 
-  def xtest_using_thread_outside_of_self
+  def test_using_thread_outside_of_self
     @thread_date = Date.new(2011, 2, 8) # => 'tuesday'
     Thread.current['week_start_day']  = 'sunday'
     Thread.current['week_length']     = 4

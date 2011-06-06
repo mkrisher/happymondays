@@ -17,6 +17,14 @@ module HappyMondays
         Thread.current[:week_start_day] || 'monday'
       end
 
+      def week_end_day=(val)
+        Thread.current[:week_end_day] = val
+      end
+
+      def week_end_day
+        Thread.current[:week_end_day]
+      end
+
       def week_length=(val)
         val = 7 if val > 7
         Thread.current[:week_length] = val
@@ -28,7 +36,7 @@ module HappyMondays
 
       alias_method :orig_wday, :wday
       def wday
-        day     = self.week_start_day
+        day     = self.week_end_day.nil? ? self.week_start_day : self.week_end_day
         result  = case day.downcase
           when 'sunday'     then 0
           when 'monday'     then 1
@@ -43,6 +51,7 @@ module HappyMondays
 
       alias_method :orig_beginning_of_week, :beginning_of_week
       def beginning_of_week
+        clear_end_day
         days_to_wday        = self.orig_wday - self.wday
         res                 = self.dup
         res                 = res - days_to_wday.days
@@ -56,18 +65,21 @@ module HappyMondays
         res                 = Date.new(self.year, self.month, (self.day + length - 1) - (self.orig_wday - self.wday))
         calc                = res.wday - 1 if length == 7
         calc                = res.wday + (length - 1) if length != 7
-        #TODO: put in a callback or new Thread so week_start_day is not overwritten
-        res.week_start_day  = Date::DAYNAMES[calc]
+        res.week_end_day    = Date::DAYNAMES[calc]
         res.acts_like?(:time) ? res.midnight : res
       end
 
       alias_method :orig_next_week, :next_week
-      def next_week()
+      def next_week
+        clear_end_day
         res                 = self.beginning_of_week + 7.days
         res.week_start_day  = self.week_start_day
         res.acts_like?(:time) ? res.change(:hour => 0) : res
       end
 
+      def clear_end_day
+        self.week_end_day    = nil
+      end
     end
   end
 end
