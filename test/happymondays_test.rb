@@ -92,13 +92,27 @@ class HappyMondaysTest < Test::Unit::TestCase
   end
 
   def test_multithreading
-    Thread.new do
+    t1 = Thread.new do
+      @first_date = Date.new(2011, 2, 8)
+      @first_date.week_start_day = 'sunday'
+      assert_equal  'sunday', @first_date.week_start_day
+      assert_equal  'Sun 02/06/2011', @first_date.beginning_of_week.strftime('%a %m/%d/%Y')
+    end
+    t2 = Thread.new do
+      @second_date = Date.new(2011, 2, 8)
+      @second_date.week_start_day = 'monday'
+      assert_equal  'monday', @second_date.week_start_day
+      assert_equal  'Mon 02/07/2011', @second_date.beginning_of_week.strftime('%a %m/%d/%Y')
+    end
+    t1.join
+    t2.join
+    t3 = Thread.new do
       @first_date = Date.new(2011, 2, 8)
       @first_date.week_start_day = 'sunday'
       assert_equal  'sunday', @first_date.week_start_day
       assert_equal  'Sun 02/06/2011', @first_date.beginning_of_week.strftime('%a %m/%d/%Y')
 
-      Thread.new do
+      t4 = Thread.new do
         @second_date = Date.new(2011, 2, 8)
         @second_date.week_start_day = 'monday'
         assert_equal  'monday', @second_date.week_start_day
