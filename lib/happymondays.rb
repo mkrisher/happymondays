@@ -34,8 +34,7 @@ module HappyMondays
         Thread.current[:week_length] || 7
       end
 
-      alias_method :orig_wday, :wday
-      def wday
+      def adjusted_wday
         day     = self.week_end_day.nil? ? self.week_start_day : self.week_end_day
         result  = case day.downcase
           when 'sunday'     then 0
@@ -49,30 +48,27 @@ module HappyMondays
         end
       end
 
-      alias_method :orig_beginning_of_week, :beginning_of_week
-      def beginning_of_week
+      def adjusted_beginning_of_week
         clear_end_day
-        days_to_wday        = self.orig_wday - self.wday
+        days_to_wday        = self.wday - self.adjusted_wday
         res                 = self.dup
         res                 = res - days_to_wday.days
         res.week_start_day  = self.week_start_day
         res.acts_like?(:time) ? res.midnight : res
       end
 
-      alias_method :orig_end_of_week, :end_of_week
-      def end_of_week
+      def adjusted_end_of_week
         length              = self.week_length
-        res                 = Date.new(self.year, self.month, (self.day + length - 1) - (self.orig_wday - self.wday))
-        calc                = res.wday - 1 if length == 7
-        calc                = res.wday + (length - 1) if length != 7
+        res                 = Date.new(self.year, self.month, (self.day + length - 1) - (self.wday - self.adjusted_wday))
+        calc                = res.adjusted_wday - 1 if length == 7
+        calc                = res.adjusted_wday + (length - 1) if length != 7
         res.week_end_day    = Date::DAYNAMES[calc]
         res.acts_like?(:time) ? res.midnight : res
       end
 
-      alias_method :orig_next_week, :next_week
-      def next_week
+      def adjusted_next_week
         clear_end_day
-        res                 = self.beginning_of_week + 7.days
+        res                 = self.adjusted_beginning_of_week + 7.days
         res.week_start_day  = self.week_start_day
         res.acts_like?(:time) ? res.change(:hour => 0) : res
       end
@@ -101,9 +97,9 @@ require 'happymondays'
 #
 d = Date.new(2011, 2, 8)                            # => Tue, 08 Feb 2011
 d.week_start_day = 'sunday'                         # use Sunday as the start day vs. default Monday
-puts d.beginning_of_week.strftime('%a %m/%d/%Y')    # => Sun, 06 Feb 2011
-puts d.end_of_week.strftime('%a %m/%d/%Y')          # => Sat, 12 Feb 2011
-puts d.next_week.strftime('%a %m/%d/%Y')            # => Sun, 13 Feb 2011
+puts d.adjusted_beginning_of_week.strftime('%a %m/%d/%Y')    # => Sun, 06 Feb 2011
+puts d.adjusted_end_of_week.strftime('%a %m/%d/%Y')          # => Sat, 12 Feb 2011
+puts d.adjusted_next_week.strftime('%a %m/%d/%Y')            # => Sun, 13 Feb 2011
 
 # creates the date object using any day of the week
 # sets the work week length in number of days
@@ -111,12 +107,12 @@ puts d.next_week.strftime('%a %m/%d/%Y')            # => Sun, 13 Feb 2011
 #
 d = Date.new(2011,2,7)                              # => Mon, 07 Feb 2011
 d.week_length = 5                                   # => sets the length in num of days
-puts d.end_of_week.strftime('%a %m/%d/%Y')          # => Fri, 11 Feb 2011
+puts d.adjusted_end_of_week.strftime('%a %m/%d/%Y') # => Fri, 11 Feb 2011
 
 # or if you prefer to use Threads
 d = Date.new(2011, 2, 8)
 Thread.current['week_start_day'] = 'sunday'
-puts d.beginning_of_week.strftime('%a %m/%d/%Y')    # => Sun, 06 Feb 2011
-puts d.end_of_week.strftime('%a %m/%d/%Y')          # => Sat, 12 Feb 2011
-puts d.next_week.strftime('%a %m/%d/%Y')            # => Sun, 13 Feb 2011
+puts d.adjusted_beginning_of_week.strftime('%a %m/%d/%Y')    # => Sun, 06 Feb 2011
+puts d.adjusted_end_of_week.strftime('%a %m/%d/%Y')          # => Sat, 12 Feb 2011
+puts d.adjusted_next_week.strftime('%a %m/%d/%Y')            # => Sun, 13 Feb 2011
 

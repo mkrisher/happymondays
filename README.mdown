@@ -43,29 +43,24 @@ Example usage:
 
 7) request a date object representing the beginning of the week for the date instance
 
-  `d.beginning_of_week.strftime('%a %m/%d/%Y') # => Sun, 06 Feb 2011`
+  `d.adjusted_beginning_of_week.strftime('%a %m/%d/%Y') # => Sun, 06 Feb 2011`
 
 8) request a date object representing the end of the week for the date instance
 
-  `d.end_of_week.strftime('%a %m/%d/%Y') # => Sat, 12 Feb 2011`
+  `d.adjusted_end_of_week.strftime('%a %m/%d/%Y') # => Sat, 12 Feb 2011`
 
 Why use this?
 ===================================
 
 1) this gem was created out of a need to alter the standard Ruby week from beginning on Monday and ending on Sunday
 
-2) this gem overwrites three methods, first being the Date#wday and second and third being
-  ActiveSupport::CoreExtensions::Date::Calculations#next_week and ActiveSupport::CoreExtensions::Date::Calculations#end_of_week
+2) this gem is simply a mixin that extends the Date and ActiveSupport::CoreExtensions::Date::Calculations classes
 
-3) this gem aliases the default methods and their default behavior is still available
+3) it can be used anywhere a normal Ruby Date object would be used
 
-4) this gem is simply a mixin that extends the Date and ActiveSupport::CoreExtensions::Date::Calculations classes
+4) the gem allows you to set the day of the week the week starts on
 
-5) it can be used anywhere a normal Ruby Date object would be used
-
-6) the gem allows you to set the day of the week the week starts on
-
-7) the gem also allows you to set the number of days in the work week, for example the default M-F being 5 vs. M-W being 3
+5) the gem also allows you to set the number of days in the work week, for example the default M-F being 5 vs. M-W being 3
 
 Support
 ==================================
