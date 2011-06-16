@@ -9,19 +9,19 @@ class HappyMondaysTest < Test::Unit::TestCase
 
   def test_week_start_day
     @my_date.clear_end_day
-    @my_date.week_start_day = 'sunday'
+    Date.week_start_day = 'sunday'
     assert_equal  0, @my_date.adjusted_wday
-    @my_date.week_start_day = 'monday'
+    Date.week_start_day = 'monday'
     assert_equal  1, @my_date.adjusted_wday
-    @my_date.week_start_day = 'tuesday'
+    Date.week_start_day = 'tuesday'
     assert_equal  2, @my_date.adjusted_wday
-    @my_date.week_start_day = 'wednesday'
+    Date.week_start_day = 'wednesday'
     assert_equal  3, @my_date.adjusted_wday
-    @my_date.week_start_day = 'thursday'
+    Date.week_start_day = 'thursday'
     assert_equal  4, @my_date.adjusted_wday
-    @my_date.week_start_day = 'friday'
+    Date.week_start_day = 'friday'
     assert_equal  5, @my_date.adjusted_wday
-    @my_date.week_start_day = 'saturday'
+    Date.week_start_day = 'saturday'
     assert_equal  6, @my_date.adjusted_wday
   end
 

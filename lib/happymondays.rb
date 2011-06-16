@@ -9,31 +9,6 @@ module HappyMondays
   def self.included(base)
     base.class_eval do
 
-      def week_start_day=(val)
-        Thread.current[:week_start_day] = val
-      end
-
-      def week_start_day
-        Thread.current[:week_start_day] || 'monday'
-      end
-
-      def week_end_day=(val)
-        Thread.current[:week_end_day] = val
-      end
-
-      def week_end_day
-        Thread.current[:week_end_day]
-      end
-
-      def week_length=(val)
-        val = 7 if val > 7
-        Thread.current[:week_length] = val
-      end
-
-      def week_length
-        Thread.current[:week_length] || 7
-      end
-
       def adjusted_wday
         day     = self.week_end_day.nil? ? self.week_start_day : self.week_end_day
         result  = case day.downcase
@@ -76,8 +51,41 @@ module HappyMondays
       def clear_end_day
         self.week_end_day    = nil
       end
+      
+    end    
+
+    base.extend         Methods
+    base.send :include, Methods
+
+  end
+  
+  module Methods
+    def week_start_day=(val)
+      Thread.current[:week_start_day] = val
+    end
+
+    def week_start_day
+      Thread.current[:week_start_day] || 'monday'
+    end
+
+    def week_end_day=(val)
+      Thread.current[:week_end_day] = val
+    end
+
+    def week_end_day
+      Thread.current[:week_end_day]
+    end
+
+    def week_length=(val)
+      val = 7 if val > 7
+      Thread.current[:week_length] = val
+    end
+
+    def week_length
+      Thread.current[:week_length] || 7
     end
   end
+  
 end
 
 Date.send :include, HappyMondays
@@ -95,8 +103,8 @@ require 'happymondays'
 # gets the end of the week,
 # gets the start of next week
 #
+Date.week_start_day = 'sunday'                      # use Sunday as the start day vs. default Monday
 d = Date.new(2011, 2, 8)                            # => Tue, 08 Feb 2011
-d.week_start_day = 'sunday'                         # use Sunday as the start day vs. default Monday
 puts d.adjusted_beginning_of_week.strftime('%a %m/%d/%Y')    # => Sun, 06 Feb 2011
 puts d.adjusted_end_of_week.strftime('%a %m/%d/%Y')          # => Sat, 12 Feb 2011
 puts d.adjusted_next_week.strftime('%a %m/%d/%Y')            # => Sun, 13 Feb 2011

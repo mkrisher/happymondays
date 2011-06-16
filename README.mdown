@@ -33,13 +33,13 @@ Instructions for irb use
 
 Example usage:
 
-5) create a new date object
+5) define the day of the week to start the work week
+
+  `Date.week_start_day = 'sunday'`
+
+6) create a new date object
 
   `d = Date.new(2011, 2, 8) # => Tue, 08 Feb 2011`
-
-6) define the day of the week to start the work week
-
-  `d.week_start_day = 'sunday'`
 
 7) request a date object representing the beginning of the week for the date instance
 
