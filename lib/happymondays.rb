@@ -47,10 +47,6 @@ module HappyMondays
         res.week_start_day  = self.week_start_day
         res.acts_like?(:time) ? res.change(:hour => 0) : res
       end
-
-      def clear_end_day
-        self.week_end_day    = nil
-      end
       
     end    
 
@@ -61,28 +57,46 @@ module HappyMondays
   
   module Methods
     def week_start_day=(val)
-      Thread.current[:week_start_day] = val
+      Thread.current[:hm_week_start_day] = val
     end
 
     def week_start_day
-      Thread.current[:week_start_day] || 'monday'
+      Thread.current[:hm_week_start_day] || 'monday'
     end
 
     def week_end_day=(val)
-      Thread.current[:week_end_day] = val
+      Thread.current[:hm_week_end_day] = val
     end
 
     def week_end_day
-      Thread.current[:week_end_day]
+      Thread.current[:hm_week_end_day]
     end
 
     def week_length=(val)
-      val = 7 if val > 7
-      Thread.current[:week_length] = val
+      val = 7 if val && val > 7
+      Thread.current[:hm_week_length] = val
     end
 
     def week_length
-      Thread.current[:week_length] || 7
+      Thread.current[:hm_week_length] || 7
+    end
+    
+    def clear_start_day
+      self.week_start_day = nil
+    end
+    
+    def clear_end_day
+      self.week_end_day = nil
+    end
+    
+    def clear_week_length
+      self.week_length = nil
+    end
+        
+    def clear_adjusted_weeks
+      self.clear_start_day
+      self.clear_end_day
+      self.clear_week_length
     end
   end
   
@@ -119,7 +133,7 @@ puts d.adjusted_end_of_week.strftime('%a %m/%d/%Y') # => Fri, 11 Feb 2011
 
 # or if you prefer to use Threads
 d = Date.new(2011, 2, 8)
-Thread.current['week_start_day'] = 'sunday'
+Thread.current['hm_week_start_day'] = 'sunday'
 puts d.adjusted_beginning_of_week.strftime('%a %m/%d/%Y')    # => Sun, 06 Feb 2011
 puts d.adjusted_end_of_week.strftime('%a %m/%d/%Y')          # => Sat, 12 Feb 2011
 puts d.adjusted_next_week.strftime('%a %m/%d/%Y')            # => Sun, 13 Feb 2011

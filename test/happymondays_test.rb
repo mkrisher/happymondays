@@ -2,8 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + "/test_helper")
 
 class HappyMondaysTest < Test::Unit::TestCase
   def setup
-    Thread.current['week_start_day'] = nil
-    Thread.current['week_length'] = nil
+    Date.clear_adjusted_weeks
     @my_date = Date.new(2011, 2, 8)
   end
 
@@ -118,10 +117,24 @@ class HappyMondaysTest < Test::Unit::TestCase
 
   def test_using_thread_outside_of_self
     @thread_date = Date.new(2011, 2, 8) # => 'tuesday'
-    Thread.current['week_start_day']  = 'sunday'
-    Thread.current['week_length']     = 4
+    Thread.current['hm_week_start_day']  = 'sunday'
+    Thread.current['hm_week_length']     = 4
     assert_equal  'Sun 02/06/2011',   @thread_date.adjusted_beginning_of_week.strftime('%a %m/%d/%Y')
     assert_equal  'Wed 02/09/2011',   @thread_date.adjusted_end_of_week.strftime('%a %m/%d/%Y')
     assert_equal  'Sun 02/13/2011',   @thread_date.adjusted_next_week.strftime('%a %m/%d/%Y')
+  end
+  
+  def test_clear_adjusted_weeks__and_assure_thread_is_cleaned_up
+    Date.week_start_day = 'sunday'
+    Date.week_end_day   = 'saturday'
+    Date.week_length    = 7
+    assert_equal 'sunday',   Thread.current[:hm_week_start_day]
+    assert_equal 'saturday', Thread.current[:hm_week_end_day]
+    assert_equal 7,          Thread.current[:hm_week_length]
+    
+    Date.clear_adjusted_weeks
+    assert_nil Thread.current[:hm_week_start_day]
+    assert_nil Thread.current[:hm_week_end_day]
+    assert_nil Thread.current[:hm_week_length]
   end
 end

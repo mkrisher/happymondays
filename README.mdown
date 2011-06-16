@@ -49,6 +49,10 @@ Example usage:
 
   `d.adjusted_end_of_week.strftime('%a %m/%d/%Y') # => Sat, 12 Feb 2011`
 
+9) if you want to clean up after yourself and "reset" Thread.current
+
+  `Date.clear_adjusted_weeks`
+
 Why use this?
 ===================================
 
