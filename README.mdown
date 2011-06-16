@@ -52,6 +52,13 @@ Example usage:
 9) if you want to clean up after yourself and "reset" Thread.current
 
   `Date.clear_adjusted_weeks`
+  
+10) if you want to work in a block that cleans up after itself
+
+    Date.with_week_start_day('sunday') do
+      d = Date.new(2011, 2, 8) # => Tue, 08 Feb 2011
+      d.adjusted_beginning_of_week.strftime('%a %m/%d/%Y') # => Sun, 06 Feb 2011
+    end
 
 Why use this?
 ===================================

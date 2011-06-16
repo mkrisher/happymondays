@@ -63,6 +63,12 @@ module HappyMondays
     def week_start_day
       Thread.current[:hm_week_start_day] || 'monday'
     end
+    
+    def with_week_start_day(val)
+      self.week_start_day = val
+      yield
+      self.clear_adjusted_weeks
+    end
 
     def week_end_day=(val)
       Thread.current[:hm_week_end_day] = val

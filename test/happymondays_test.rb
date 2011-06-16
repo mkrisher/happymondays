@@ -124,6 +124,14 @@ class HappyMondaysTest < Test::Unit::TestCase
     assert_equal  'Sun 02/13/2011',   @thread_date.adjusted_next_week.strftime('%a %m/%d/%Y')
   end
   
+  def test_with_week_start_day
+    Date.with_week_start_day('sunday') do
+      assert_equal  'sunday', Date.week_start_day
+    end
+    assert_equal  'monday', Date.week_start_day
+    assert_nil Thread.current[:hm_week_start_day]
+  end
+  
   def test_clear_adjusted_weeks__and_assure_thread_is_cleaned_up
     Date.week_start_day = 'sunday'
     Date.week_end_day   = 'saturday'
